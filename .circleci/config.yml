@@ -11,7 +11,26 @@ jobs:
       - run: npm run affected:lint -- --all
       - run: npm run affected:test -- --all
       - run: npm run affected:e2e -- --all
+  affected:
+    docker:
+      - image: cypress/base:12
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npm run affected:lint -- --base origin/master --head HEAD
+      - run: npm run affected:test -- --base origin/master --head HEAD
+      - run: npm run affected:e2e -- --base origin/master --head HEAD
 workflows:
-    default:
-      jobs:
-        - all
+  version: 2
+  default:
+    jobs:
+      - all:
+          filters:
+            branches:
+              only: 
+                - master
+      - affected:
+          filters:
+            branches:
+              ignore: 
+                - master
