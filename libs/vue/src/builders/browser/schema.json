@@ -96,6 +96,10 @@
         }
       },
       "additionalProperties": false
+    },
+    "pluginConfig": {
+      "additionalProperties": true,
+      "type": "object"
     }
   },
   "required": ["dest", "index", "main", "tsConfig"],

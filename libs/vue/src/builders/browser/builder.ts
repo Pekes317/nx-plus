@@ -34,6 +34,7 @@ export function runBuilder(
     inlineOptions;
   }> {
     const projectRoot = await getProjectRoot(context);
+    const pluginConfig = options.pluginConfig || {};
 
     const inlineOptions = {
       chainWebpack: (config) => {
@@ -47,6 +48,7 @@ export function runBuilder(
       filenameHashing: options.filenameHashing,
       productionSourceMap: options.productionSourceMap,
       css: options.css,
+      ...pluginConfig,
     };
 
     return {
