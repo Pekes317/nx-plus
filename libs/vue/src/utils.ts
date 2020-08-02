@@ -61,3 +61,8 @@ export function checkUnsupportedConfig(
     );
   }
 }
+
+export enum RenderTarget {
+  client = 'client',
+  server = 'server',
+}

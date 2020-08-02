@@ -1,10 +1,58 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import { getSystemPath, join, normalize } from '@angular-devkit/core';
-import { BrowserBuilderSchema } from './builders/browser/schema';
+import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
+import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
+import WebpackBar from 'webpackbar';
+
+import { SSRBuilderSchema } from './builders/ssr/schema';
+import { RenderTarget } from './utils';
+
+export function addServerSideRender(config, target: RenderTarget) {
+  const isClient = target === RenderTarget.client;
+
+  if (isClient) {
+    config.plugin('ssr').use(VueSSRClientPlugin);
+    config
+      .plugin('loader')
+      .use(WebpackBar, [{ name: 'Client', color: 'green' }]);
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap((options) => {
+        options.optimizeSSR = false;
+
+        return options;
+      });
+  } else {
+    config.plugin('ssr').use(VueSSRServerPlugin);
+    config
+      .plugin('loader')
+      .use(WebpackBar, [{ name: 'Server', color: 'orange' }]);
+
+    config.output.libraryTarget('commonjs2');
+    config.target('node');
+    config.optimization.splitChunks(false).minimize(false);
+    config.node.clear();
+
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap((options) => {
+        if (!isClient) {
+          options.cacheIdentifier += '-server';
+          options.cacheDirectory += '-server';
+        }
+
+        options.optimizeSSR = !isClient;
+
+        return options;
+      });
+  }
+}
 
 export function modifyIndexHtmlPath(
   config,
-  options: BrowserBuilderSchema,
+  options: SSRBuilderSchema,
   context: BuilderContext
 ): void {
   config.plugin('html').tap((args) => {
@@ -17,7 +65,7 @@ export function modifyIndexHtmlPath(
 
 export function modifyEntryPoint(
   config,
-  options: BrowserBuilderSchema,
+  options: SSRBuilderSchema,
   context: BuilderContext
 ): void {
   config.entry('app').clear();
@@ -28,7 +76,7 @@ export function modifyEntryPoint(
 
 export function modifyTsConfigPaths(
   config,
-  options: BrowserBuilderSchema,
+  options: SSRBuilderSchema,
   context: BuilderContext
 ): void {
   const tsConfigPath = getSystemPath(
@@ -95,7 +143,7 @@ export function modifyCachePaths(config, context: BuilderContext): void {
 
 export function modifyTypescriptAliases(
   config,
-  options: BrowserBuilderSchema,
+  options: SSRBuilderSchema,
   context: BuilderContext
 ) {
   const tsConfigPath = getSystemPath(

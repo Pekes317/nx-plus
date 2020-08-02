@@ -10,6 +10,11 @@
       "implementation": "./src/builders/dev-server/builder",
       "schema": "./src/builders/dev-server/schema.json",
       "description": "dev-server builder"
+    },
+    "ssr": {
+      "implementation": "./src/builders/ssr/builder",
+      "schema": "./src/builders/ssr/schema.json",
+      "description": "server side rendering builder"
     }
   }
 }
