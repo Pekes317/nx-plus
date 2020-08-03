@@ -1,5 +1,6 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import { getSystemPath, join, normalize } from '@angular-devkit/core';
+import HtmlWebpack from 'html-webpack-plugin';
 import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
 import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
 import WebpackBar from 'webpackbar';
@@ -86,6 +87,17 @@ export function addServerSideRender(
             join(normalize(context.workspaceRoot), options?.serverBundle?.main)
           )
         );
+    }
+
+    if (options?.template) {
+      config.plugin('html').tap((args) => {
+        args[0].filename = options.template.outFile;
+        args[0].template = getSystemPath(
+          join(normalize(context.workspaceRoot), options.template.index)
+        );
+
+        return args;
+      });
     }
   }
 }

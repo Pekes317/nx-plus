@@ -5,6 +5,11 @@ interface SSRBundle {
   outFile: string;
 }
 
+interface SSRTemplate {
+  index: string;
+  outFile: string;
+}
+
 export interface SSRBuilderSchema extends JsonObject {
   mode: string;
   dest: string;
@@ -29,4 +34,5 @@ export interface SSRBuilderSchema extends JsonObject {
   clientBundle: SSRBundle;
   serverBundle: SSRBundle;
   pluginConfig: Record<string, unknown>;
+  template: SSRTemplate;
 }

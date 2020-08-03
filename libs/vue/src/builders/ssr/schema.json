@@ -130,6 +130,18 @@
           "type": "string"
         }
       }
+    },
+    "template": {
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "string"
+        },
+        "outFile": {
+          "type": "string"
+        }
+      }
     }
   },
   "required": ["dest", "index", "main", "tsConfig"],
