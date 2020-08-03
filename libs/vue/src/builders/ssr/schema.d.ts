@@ -1,5 +1,10 @@
 import { JsonObject } from '@angular-devkit/core';
 
+interface SSRBundle {
+  main: string;
+  outFile: string;
+}
+
 export interface SSRBuilderSchema extends JsonObject {
   mode: string;
   dest: string;
@@ -20,5 +25,8 @@ export interface SSRBuilderSchema extends JsonObject {
     sourceMap: boolean;
     loaderOptions: object;
   };
+  nodeExternalsAllowlist: string[];
+  clientBundle: SSRBundle;
+  serverBundle: SSRBundle;
   pluginConfig: Record<string, unknown>;
 }

@@ -47,7 +47,7 @@ export function runBuilder(
         modifyTsConfigPaths(config, options, context);
         modifyCachePaths(config, context);
         modifyTypescriptAliases(config, options, context);
-        addServerSideRender(config, target);
+        addServerSideRender(config, options, context, target);
       },
       publicPath: options.publicPath,
       filenameHashing: options.filenameHashing,

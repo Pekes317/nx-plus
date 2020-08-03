@@ -3,15 +3,26 @@ import { getSystemPath, join, normalize } from '@angular-devkit/core';
 import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
 import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
 import WebpackBar from 'webpackbar';
+import nodeExternals from 'webpack-node-externals';
 
+import { BrowserBuilderSchema } from './builders/browser/schema';
 import { SSRBuilderSchema } from './builders/ssr/schema';
 import { RenderTarget } from './utils';
 
-export function addServerSideRender(config, target: RenderTarget) {
+export function addServerSideRender(
+  config,
+  options: SSRBuilderSchema,
+  context: BuilderContext,
+  target: RenderTarget
+) {
   const isClient = target === RenderTarget.client;
 
   if (isClient) {
-    config.plugin('ssr').use(VueSSRClientPlugin);
+    config.plugin('ssr').use(VueSSRClientPlugin, [
+      {
+        filename: options.clientBundle.outFile || 'client.json',
+      },
+    ]);
     config
       .plugin('loader')
       .use(WebpackBar, [{ name: 'Client', color: 'green' }]);
@@ -23,8 +34,23 @@ export function addServerSideRender(config, target: RenderTarget) {
 
         return options;
       });
+    config.entry('app').clear();
+
+    if (options?.clientBundle?.main) {
+      config
+        .entry('app')
+        .add(
+          getSystemPath(
+            join(normalize(context.workspaceRoot), options?.clientBundle?.main)
+          )
+        );
+    }
   } else {
-    config.plugin('ssr').use(VueSSRServerPlugin);
+    config.plugin('ssr').use(VueSSRServerPlugin, [
+      {
+        filename: options.serverBundle.outFile || 'server.json',
+      },
+    ]);
     config
       .plugin('loader')
       .use(WebpackBar, [{ name: 'Server', color: 'orange' }]);
@@ -32,6 +58,9 @@ export function addServerSideRender(config, target: RenderTarget) {
     config.output.libraryTarget('commonjs2');
     config.target('node');
     config.optimization.splitChunks(false).minimize(false);
+    config.externals(
+      nodeExternals({ allowlist: options.nodeExternalsAllowlist || [] })
+    );
     config.node.clear();
 
     config.module
@@ -47,12 +76,23 @@ export function addServerSideRender(config, target: RenderTarget) {
 
         return options;
       });
+    config.entry('app').clear();
+
+    if (options?.serverBundle?.main) {
+      config
+        .entry('app')
+        .add(
+          getSystemPath(
+            join(normalize(context.workspaceRoot), options?.serverBundle?.main)
+          )
+        );
+    }
   }
 }
 
 export function modifyIndexHtmlPath(
   config,
-  options: SSRBuilderSchema,
+  options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
   config.plugin('html').tap((args) => {
@@ -65,7 +105,7 @@ export function modifyIndexHtmlPath(
 
 export function modifyEntryPoint(
   config,
-  options: SSRBuilderSchema,
+  options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
   config.entry('app').clear();
@@ -76,7 +116,7 @@ export function modifyEntryPoint(
 
 export function modifyTsConfigPaths(
   config,
-  options: SSRBuilderSchema,
+  options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
   const tsConfigPath = getSystemPath(
@@ -143,7 +183,7 @@ export function modifyCachePaths(config, context: BuilderContext): void {
 
 export function modifyTypescriptAliases(
   config,
-  options: SSRBuilderSchema,
+  options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ) {
   const tsConfigPath = getSystemPath(
