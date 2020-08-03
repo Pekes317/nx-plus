@@ -1,6 +1,5 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import { getSystemPath, join, normalize } from '@angular-devkit/core';
-import HtmlWebpack from 'html-webpack-plugin';
 import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
 import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
 import WebpackBar from 'webpackbar';

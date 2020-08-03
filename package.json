@@ -65,7 +65,6 @@
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-vue": "^6.2.2",
-    "html-webpack-plugin": "^4.3.0",
     "husky": "^4.2.5",
     "jest": "25.2.3",
     "lint-staged": "^10.2.11",
