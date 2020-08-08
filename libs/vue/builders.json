@@ -11,6 +11,11 @@
       "schema": "./src/builders/dev-server/schema.json",
       "description": "dev-server builder"
     },
+    "library": {
+      "implementation": "./src/builders/library/builder",
+      "schema": "./src/builders/library/schema.json",
+      "description": "library builder"
+    },
     "ssr": {
       "implementation": "./src/builders/ssr/builder",
       "schema": "./src/builders/ssr/schema.json",

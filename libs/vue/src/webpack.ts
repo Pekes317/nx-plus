@@ -1,11 +1,12 @@
 import { BuilderContext } from '@angular-devkit/architect';
-import { getSystemPath, join, normalize } from '@angular-devkit/core';
+import { getSystemPath, join, normalize, Path } from '@angular-devkit/core';
 import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
 import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
 import WebpackBar from 'webpackbar';
 import nodeExternals from 'webpack-node-externals';
 
 import { BrowserBuilderSchema } from './builders/browser/schema';
+import { LibraryBuilderSchema } from './builders/library/schema';
 import { SSRBuilderSchema } from './builders/ssr/schema';
 import { RenderTarget } from './utils';
 
@@ -127,7 +128,7 @@ export function modifyEntryPoint(
 
 export function modifyTsConfigPaths(
   config,
-  options: BrowserBuilderSchema | SSRBuilderSchema,
+  options: BrowserBuilderSchema | LibraryBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
   const tsConfigPath = getSystemPath(
@@ -194,7 +195,7 @@ export function modifyCachePaths(config, context: BuilderContext): void {
 
 export function modifyTypescriptAliases(
   config,
-  options: BrowserBuilderSchema | SSRBuilderSchema,
+  options: BrowserBuilderSchema | LibraryBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ) {
   const tsConfigPath = getSystemPath(
@@ -220,4 +221,23 @@ export function modifyTypescriptAliases(
         extensions,
       },
     ]);
+}
+
+export function modifyCopyAssets(
+  config,
+  options: LibraryBuilderSchema,
+  context: BuilderContext,
+  projectRoot: Path
+): void {
+  const transformedAssetPatterns = ['package.json', 'README.md'].map(
+    (file) => ({
+      from: getSystemPath(join(projectRoot, file)),
+      to: getSystemPath(join(normalize(context.workspaceRoot), options.dest)),
+    })
+  );
+
+  config
+    .plugin('copy')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    .use(require('copy-webpack-plugin'), [transformedAssetPatterns]);
 }
