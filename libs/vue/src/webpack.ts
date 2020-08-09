@@ -109,20 +109,23 @@ export function copyStaticAssets(
   context: BuilderContext
 ) {
   const publicCheck = /(public)/gi;
-  const transformedAssetPatterns = options.assets.map((asset) => {
-    const assetPath = publicCheck.test(asset)
-      ? asset.split('public')[1]
-      : asset.split('src')[1];
 
-    return {
-      from: getSystemPath(join(normalize(context.workspaceRoot), asset)),
-      to: getSystemPath(
-        join(normalize(context.workspaceRoot), options.dest, assetPath)
-      ),
-    };
-  });
+  if (options.assets && options.assets.length > 0) {
+    const transformedAssetPatterns = options.assets.map((asset) => {
+      const assetPath = publicCheck.test(asset)
+        ? asset.split('public')[1]
+        : asset.split('src')[1];
 
-  config.plugin('copy').use(CopyPlugin, [transformedAssetPatterns]);
+      return {
+        from: getSystemPath(join(normalize(context.workspaceRoot), asset)),
+        to: getSystemPath(
+          join(normalize(context.workspaceRoot), options.dest, assetPath)
+        ),
+      };
+    });
+
+    config.plugin('copy').use(CopyPlugin, [transformedAssetPatterns]);
+  }
 }
 
 export function modifyIndexHtmlPath(
