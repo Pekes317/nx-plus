@@ -13,6 +13,7 @@ import {
   modifyChalkOutput,
 } from '../../utils';
 import {
+  copyStaticAssets,
   modifyCachePaths,
   modifyEntryPoint,
   modifyIndexHtmlPath,
@@ -43,6 +44,7 @@ export function runBuilder(
         modifyTsConfigPaths(config, options, context);
         modifyCachePaths(config, context);
         modifyTypescriptAliases(config, options, context);
+        copyStaticAssets(config, options, context);
       },
       publicPath: options.publicPath,
       filenameHashing: options.filenameHashing,

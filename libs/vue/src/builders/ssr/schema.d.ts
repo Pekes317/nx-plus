@@ -11,6 +11,7 @@ interface SSRTemplate {
 }
 
 export interface SSRBuilderSchema extends JsonObject {
+  assets: string[];
   mode: string;
   dest: string;
   clean: boolean;

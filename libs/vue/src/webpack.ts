@@ -1,5 +1,6 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import { getSystemPath, join, normalize, Path } from '@angular-devkit/core';
+import CopyPlugin from 'copy-webpack-plugin';
 import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
 import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
 import WebpackBar from 'webpackbar';
@@ -100,6 +101,28 @@ export function addServerSideRender(
       });
     }
   }
+}
+
+export function copyStaticAssets(
+  config,
+  options: BrowserBuilderSchema | SSRBuilderSchema,
+  context: BuilderContext
+) {
+  const publicCheck = /(public)/gi;
+  const transformedAssetPatterns = options.assets.map((asset) => {
+    const assetPath = publicCheck.test(asset)
+      ? asset.split('public')[1]
+      : asset.split('src')[1];
+
+    return {
+      from: getSystemPath(join(normalize(context.workspaceRoot), asset)),
+      to: getSystemPath(
+        join(normalize(context.workspaceRoot), options.dest, assetPath)
+      ),
+    };
+  });
+
+  config.plugin('copy').use(CopyPlugin, [transformedAssetPatterns]);
 }
 
 export function modifyIndexHtmlPath(

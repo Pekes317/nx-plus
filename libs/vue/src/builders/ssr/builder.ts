@@ -15,6 +15,7 @@ import {
 } from '../../utils';
 import {
   addServerSideRender,
+  copyStaticAssets,
   modifyCachePaths,
   modifyEntryPoint,
   modifyIndexHtmlPath,
@@ -48,6 +49,7 @@ export function runBuilder(
         modifyCachePaths(config, context);
         modifyTypescriptAliases(config, options, context);
         addServerSideRender(config, options, context, target);
+        copyStaticAssets(config, options, context);
       },
       publicPath: options.publicPath,
       filenameHashing: options.filenameHashing,

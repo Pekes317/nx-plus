@@ -1,6 +1,7 @@
 import { JsonObject } from '@angular-devkit/core';
 
 export interface BrowserBuilderSchema extends JsonObject {
+  assets: string[];
   mode: string;
   dest: string;
   clean: boolean;
