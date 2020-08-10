@@ -38,7 +38,7 @@ export function addServerSideRender(
       });
     config.entry('app').clear();
 
-    if (options?.clientBundle?.main) {
+    if (options && options.clientBundle) {
       config
         .entry('app')
         .add(
@@ -80,7 +80,7 @@ export function addServerSideRender(
       });
     config.entry('app').clear();
 
-    if (options?.serverBundle?.main) {
+    if (options && options.serverBundle) {
       config
         .entry('app')
         .add(
@@ -90,7 +90,7 @@ export function addServerSideRender(
         );
     }
 
-    if (options?.template) {
+    if (options && options.template) {
       config.plugin('html').tap((args) => {
         args[0].filename = options.template.outFile;
         args[0].template = getSystemPath(
