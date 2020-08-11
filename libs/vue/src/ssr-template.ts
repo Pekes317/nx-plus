@@ -17,10 +17,10 @@ export const createServerSideTemplate = (
     encoding: 'utf-8',
   });
 
-  fileContent.replace(spaContainer, ssrHolder);
+  const ssrContent = fileContent.replace(spaContainer, ssrHolder);
   writeFileSync(
     join(process.cwd(), dest, `${templateOption.outFile || 'template.html'}`),
-    fileContent,
+    ssrContent,
     {
       encoding: 'utf-8',
     }
