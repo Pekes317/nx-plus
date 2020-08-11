@@ -143,6 +143,12 @@
       "additionalProperties": false,
       "type": "object",
       "properties": {
+        "elementId": {
+          "type": "string"
+        },
+        "elementTag": {
+          "type": "string"
+        },
         "index": {
           "type": "string"
         },

@@ -4,6 +4,7 @@ import CopyPlugin from 'copy-webpack-plugin';
 import VueSSRClientPlugin from 'vue-server-renderer/client-plugin';
 import VueSSRServerPlugin from 'vue-server-renderer/server-plugin';
 import WebpackBar from 'webpackbar';
+import Config from 'webpack-chain';
 import nodeExternals from 'webpack-node-externals';
 
 import { BrowserBuilderSchema } from './builders/browser/schema';
@@ -12,7 +13,7 @@ import { SSRBuilderSchema } from './builders/ssr/schema';
 import { RenderTarget } from './utils';
 
 export function addServerSideRender(
-  config,
+  config: Config,
   options: SSRBuilderSchema,
   context: BuilderContext,
   target: RenderTarget
@@ -59,7 +60,7 @@ export function addServerSideRender(
 
     config.output.libraryTarget('commonjs2');
     config.target('node');
-    config.optimization.splitChunks(false).minimize(false);
+    config.optimization.splitChunks({}).minimize(false);
     config.externals(
       nodeExternals({ allowlist: options.nodeExternalsAllowlist || [] })
     );
@@ -91,11 +92,17 @@ export function addServerSideRender(
     }
 
     if (options && options.template) {
-      config.plugin('html').tap((args) => {
-        args[0].filename = options.template.outFile;
-        args[0].template = getSystemPath(
+      const htmlOption = config.plugin('html').values()[0];
+      const ssrTemplate = {
+        ...htmlOption,
+        fileanme: options.template.outFile,
+        template: getSystemPath(
           join(normalize(context.workspaceRoot), options.template.index)
-        );
+        ),
+      };
+
+      config.plugin('html').tap((args) => {
+        args.push(ssrTemplate);
 
         return args;
       });
@@ -104,14 +111,14 @@ export function addServerSideRender(
 }
 
 export function copyStaticAssets(
-  config,
+  config: Config,
   options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ) {
   const publicCheck = /(public)/gi;
 
   if (options.assets && options.assets.length > 0) {
-    const transformedAssetPatterns = options.assets.map((asset) => {
+    const assetsPatterns = options.assets.map((asset) => {
       const assetPath = publicCheck.test(asset)
         ? asset.split('public')[1]
         : asset.split('src')[1];
@@ -124,12 +131,12 @@ export function copyStaticAssets(
       };
     });
 
-    config.plugin('copy').use(CopyPlugin, [transformedAssetPatterns]);
+    config.plugin('copy').use(CopyPlugin, [assetsPatterns]);
   }
 }
 
 export function modifyIndexHtmlPath(
-  config,
+  config: Config,
   options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
@@ -142,7 +149,7 @@ export function modifyIndexHtmlPath(
 }
 
 export function modifyEntryPoint(
-  config,
+  config: Config,
   options: BrowserBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
@@ -153,7 +160,7 @@ export function modifyEntryPoint(
 }
 
 export function modifyTsConfigPaths(
-  config,
+  config: Config,
   options: BrowserBuilderSchema | LibraryBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ): void {
@@ -220,7 +227,7 @@ export function modifyCachePaths(config, context: BuilderContext): void {
 }
 
 export function modifyTypescriptAliases(
-  config,
+  config: Config,
   options: BrowserBuilderSchema | LibraryBuilderSchema | SSRBuilderSchema,
   context: BuilderContext
 ) {
@@ -250,7 +257,7 @@ export function modifyTypescriptAliases(
 }
 
 export function modifyCopyAssets(
-  config,
+  config: Config,
   options: LibraryBuilderSchema,
   context: BuilderContext,
   projectRoot: Path

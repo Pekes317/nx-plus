@@ -6,6 +6,8 @@ interface SSRBundle {
 }
 
 interface SSRTemplate {
+  elmentId?: string;
+  elementTag?: string;
   index: string;
   outFile: string;
 }

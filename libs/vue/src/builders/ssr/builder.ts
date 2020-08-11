@@ -4,9 +4,13 @@ import {
   createBuilder,
 } from '@angular-devkit/architect';
 import { getSystemPath, join, normalize, Path } from '@angular-devkit/core';
+import chalk from 'chalk';
 import { from, merge, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { map, switchMap } from 'rxjs/operators';
+
 import { SSRBuilderSchema } from './schema';
+import { createServerSideTemplate } from '../../ssr-template';
 import {
   checkUnsupportedConfig,
   getProjectRoot,
@@ -148,6 +152,13 @@ export function runBuilder(
         return from(service.run('build', buildOptions, ['build']));
       }),
       map(() => ({ success: true }))
+    )
+  ).pipe(
+    tap(
+      () => chalk.bgGreenBright('Completing Build'),
+      () => chalk.redBright('Error Occurred Creating Template'),
+      () =>
+        createServerSideTemplate(options.index, options.dest, options.template)
     )
   );
 }
