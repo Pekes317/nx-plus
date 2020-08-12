@@ -10,6 +10,7 @@ import nodeExternals from 'webpack-node-externals';
 import { BrowserBuilderSchema } from './builders/browser/schema';
 import { LibraryBuilderSchema } from './builders/library/schema';
 import { SSRBuilderSchema } from './builders/ssr/schema';
+import { checkType } from './ssr-template';
 import { RenderTarget } from './utils';
 
 export function addServerSideRender(
@@ -62,7 +63,9 @@ export function addServerSideRender(
     config.target('node');
     config.optimization.splitChunks({}).minimize(false);
     config.externals(
-      nodeExternals({ allowlist: options.nodeExternalsAllowlist || [] })
+      nodeExternals({
+        allowlist: options.nodeExternalsAllowlist.map(checkType) || [],
+      })
     );
     config.node.clear();
 
@@ -188,7 +191,10 @@ export function modifyTsConfigPaths(
   });
 }
 
-export function modifyCachePaths(config, context: BuilderContext): void {
+export function modifyCachePaths(
+  config: Config,
+  context: BuilderContext
+): void {
   const vueLoaderCachePath = getSystemPath(
     join(normalize(context.workspaceRoot), 'node_modules/.cache/vue-loader')
   );

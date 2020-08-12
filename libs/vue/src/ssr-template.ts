@@ -26,3 +26,16 @@ export const createServerSideTemplate = (
     }
   );
 };
+
+export const checkType = (item: string) => {
+  const checkRegex = /\/\w+\//;
+  let result: string | RegExp = item;
+
+  if (checkRegex.test(item)) {
+    const pattern = item.slice(1, -1);
+
+    result = new RegExp(pattern, 'gi');
+  }
+
+  return result;
+};
