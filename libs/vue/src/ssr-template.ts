@@ -34,7 +34,7 @@ export const checkType = (item: string) => {
   if (checkRegex.test(item)) {
     const pattern = item.slice(1, -1);
 
-    result = new RegExp(pattern, 'gi');
+    result = new RegExp(pattern);
   }
 
   return result;
