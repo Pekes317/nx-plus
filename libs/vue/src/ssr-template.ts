@@ -10,7 +10,7 @@ export const createServerSideTemplate = (
 ) => {
   const id = templateOption.elmentId || 'app';
   const tag = templateOption.elementTag || 'div';
-  const spaContainer = `<${tag} id="${id}"></${tag}>`;
+  const spaContainer = new RegExp(`<${tag} id="${id}"></${tag}>`, 'g');
   const ssrHolder = '<!--vue-ssr-outlet-->';
   const htmlIndexPath = `${dest}/${basename(index) || 'index.html'}`;
   const fileContent = readFileSync(join(process.cwd(), htmlIndexPath), {
