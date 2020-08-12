@@ -28,7 +28,7 @@ export const createServerSideTemplate = (
 };
 
 export const checkType = (item: string) => {
-  const checkRegex = /\/\w+\//;
+  const checkRegex = /\/\w|\W+\//;
   let result: string | RegExp = item;
 
   if (checkRegex.test(item)) {
