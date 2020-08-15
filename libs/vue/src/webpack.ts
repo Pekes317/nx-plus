@@ -69,6 +69,18 @@ export function addServerSideRender(
     );
     config.node.clear();
 
+    config.plugin('define').tap((definitions) => {
+      definitions[0] = {
+        ...definitions[0],
+        'process.env': {
+          ...process.env,
+          VUE_APP_SSR: true,
+        },
+      };
+
+      return definitions;
+    });
+
     config.module
       .rule('vue')
       .use('vue-loader')
