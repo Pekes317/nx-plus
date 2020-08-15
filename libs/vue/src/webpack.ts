@@ -73,7 +73,6 @@ export function addServerSideRender(
       definitions[0] = {
         ...definitions[0],
         'process.env': {
-          ...process.env,
           VUE_APP_SSR: true,
         },
       };
