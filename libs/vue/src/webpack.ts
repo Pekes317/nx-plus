@@ -80,6 +80,8 @@ export function addServerSideRender(
       return definitions;
     });
 
+    config.output.globalObject('this');
+
     config.module
       .rule('vue')
       .use('vue-loader')
