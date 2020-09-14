@@ -4,6 +4,13 @@
   "description": "Build app",
   "type": "object",
   "properties": {
+    "assets": {
+      "type": "array",
+      "description": "List of static Assets as paths",
+      "items": {
+        "type": "string"
+      }
+    },
     "mode": {
       "type": "string",
       "description": "Specify env mode (default: development).",
@@ -99,7 +106,13 @@
     },
     "pluginConfig": {
       "additionalProperties": true,
+      "description": "Configurations related to Vue CLI Plugin such as PWA",
       "type": "object"
+    },
+    "stdin": {
+      "type": "boolean",
+      "description": "Close when stdin ends.",
+      "default": false
     }
   },
   "required": ["dest", "index", "main", "tsConfig"],

@@ -11,6 +11,7 @@ import {
   checkUnsupportedConfig,
   getProjectRoot,
   modifyChalkOutput,
+  resolveConfigureWebpack,
 } from '../../utils';
 import {
   modifyCachePaths,
@@ -42,6 +43,7 @@ export function runBuilder(
         modifyCopyAssets(config, options, context, projectRoot);
       },
       css: options.css,
+      configureWebpack: resolveConfigureWebpack(projectRoot),
     };
 
     return {
@@ -68,7 +70,7 @@ export function runBuilder(
     switchMap(({ projectRoot, inlineOptions }) => {
       checkUnsupportedConfig(context, projectRoot);
 
-      const service = new Service(projectRoot, {
+      const service = new Service(getSystemPath(projectRoot), {
         pkg: resolvePkg(context.workspaceRoot),
         inlineOptions,
       });

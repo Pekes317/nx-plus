@@ -16,8 +16,14 @@
     },
     "stdin": {
       "type": "boolean",
-      "description": "Close when stdin ends.",
-      "default": false
+      "description": "Close when stdin ends."
+    },
+    "assets": {
+      "type": "array",
+      "description": "List of static Assets as paths",
+      "items": {
+        "type": "string"
+      }
     },
     "mode": {
       "type": "string",
@@ -88,6 +94,11 @@
         }
       },
       "additionalProperties": false
+    },
+    "pluginConfig": {
+      "additionalProperties": true,
+      "description": "Configurations related to Vue CLI Plugin such as PWA",
+      "type": "object"
     },
     "devServer": {
       "type": "object",

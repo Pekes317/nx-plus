@@ -4,6 +4,8 @@ export interface DevServerBuilderSchema extends JsonObject {
   open: boolean;
   copy: boolean;
   stdin: boolean;
+  assets?: string[];
+  stdin?: boolean;
   mode?: string;
   host: string;
   port: number;
@@ -19,5 +21,6 @@ export interface DevServerBuilderSchema extends JsonObject {
     sourceMap?: boolean;
     loaderOptions: object;
   };
+  pluginConfig?: Record<string, unknown>;
   devServer: object;
 }

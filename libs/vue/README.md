@@ -13,6 +13,7 @@
 - [Nx Dependency Graph Support](#nx-dependency-graph-support)
 - [Schematics (i.e. code generation)](#schematics-ie-code-generation)
 - [Builders (i.e. task runners)](#builders-ie-task-runners)
+- [Modify the Webpack Configuration](#modify-the-webpack-configuration)
 - [Updating Nx Plus Vue](#updating-nx-plus-vue)
 
 ## Prerequisite
@@ -20,10 +21,8 @@
 If you have not already, [create an Nx workspace](https://github.com/nrwl/nx#creating-an-nx-workspace) with the following:
 
 ```
-npx create-nx-workspace@^9.0.0
+npx create-nx-workspace@^10.0.0
 ```
-
-Nx Plus Vue has support for Nx 9. Support for Nx 10 will be added soon.
 
 When creating your Nx workspace you may be prompted to choose a preset, **we do not support the `oss` preset at this time**.
 
@@ -167,6 +166,7 @@ nx serve my-app
 | `css.extract`                | `false`       | Whether to extract CSS in your components into a standalone CSS file (instead of inlined in JavaScript and injected dynamically).                                                                                                    |
 | `css.sourceMap`              | `false`       | Whether to enable source maps for CSS. Setting this to `true` may affect build performance.                                                                                                                                          |
 | `css.loaderOptions`          | `{}`          | Pass options to CSS-related loaders.                                                                                                                                                                                                 |
+| `--stdin`                    | `false`       | Close when stdin ends.                                                                                                                                                                                                               |
 
 ### Library
 
@@ -212,6 +212,18 @@ We use `@nrwl/jest` for unit testing, so the options are as documented [here](ht
 `nx e2e <name> [options]`
 
 We use `@nrwl/cypress` for e2e testing, so the options are as documented [here](https://github.com/nrwl/nx/blob/master/docs/angular/api-cypress/builders/cypress.md#cypress).
+
+## Modify the Webpack Configuration
+
+Modify the webpack config by exporting an Object or Function from your project's `configure-webpack.js` file.
+
+> If your project does not have a `configure-webpack.js` file, then simply add it at the root of your project.
+
+If the value is an Object, it will be merged into the final config using [`webpack-merge`](https://github.com/survivejs/webpack-merge).
+
+If the value is a function, it will receive the resolved config as the argument. The function can either mutate the config and return nothing, OR return a cloned or merged version of the config.
+
+For more information see the [Vue CLI documentation](https://cli.vuejs.org/config/#configurewebpack).
 
 ## Updating Nx Plus Vue
 

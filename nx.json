@@ -6,9 +6,10 @@
       "dependencies": "*",
       "devDependencies": "*"
     },
-    "tsconfig.json": "*",
     "tslint.json": "*",
-    "nx.json": "*"
+    "nx.json": "*",
+    "tsconfig.base.json": "*",
+    ".circleci/config.yml": "*"
   },
   "tasksRunnerOptions": {
     "default": {
@@ -32,6 +33,16 @@
     "vue-e2e": {
       "tags": [],
       "implicitDependencies": ["vue"]
+    },
+    "nuxt": {
+      "tags": []
+    },
+    "nuxt-e2e": {
+      "tags": [],
+      "implicitDependencies": ["nuxt"]
     }
+  },
+  "affected": {
+    "defaultBase": "master"
   }
 }

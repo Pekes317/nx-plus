@@ -15,6 +15,11 @@
       "implementation": "./src/builders/library/builder",
       "schema": "./src/builders/library/schema.json",
       "description": "library builder"
+    },
+    "ssr": {
+      "implementation": "./src/builders/ssr/builder",
+      "schema": "./src/builders/ssr/schema.json",
+      "description": "server side rendering builder"
     }
   }
 }
