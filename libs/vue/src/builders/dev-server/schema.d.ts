@@ -5,6 +5,7 @@ export interface DevServerBuilderSchema extends JsonObject {
   copy: boolean;
   stdin: boolean;
   assets?: string[];
+  stdin?: boolean;
   mode?: string;
   host: string;
   port: number;

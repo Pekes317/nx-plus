@@ -22,4 +22,5 @@ export interface BrowserBuilderSchema extends JsonObject {
     loaderOptions: object;
   };
   pluginConfig?: Record<string, unknown>;
+  stdin: boolean;
 }

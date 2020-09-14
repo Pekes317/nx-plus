@@ -11,6 +11,7 @@ import {
   checkUnsupportedConfig,
   getProjectRoot,
   modifyChalkOutput,
+  resolveConfigureWebpack,
 } from '../../utils';
 import {
   copyStaticAssets,
@@ -51,6 +52,7 @@ export function runBuilder(
       productionSourceMap: options.productionSourceMap,
       css: options.css,
       ...pluginConfig,
+      configureWebpack: resolveConfigureWebpack(projectRoot),
     };
 
     return {
@@ -77,7 +79,7 @@ export function runBuilder(
     switchMap(({ projectRoot, inlineOptions }) => {
       checkUnsupportedConfig(context, projectRoot);
 
-      const service = new Service(projectRoot, {
+      const service = new Service(getSystemPath(projectRoot), {
         pkg: resolvePkg(context.workspaceRoot),
         inlineOptions,
       });
@@ -93,6 +95,7 @@ export function runBuilder(
         'report-json': options.reportJson,
         'skip-plugins': options.skipPlugins,
         watch: options.watch,
+        stdin: options.stdin,
       };
 
       if (options.watch) {

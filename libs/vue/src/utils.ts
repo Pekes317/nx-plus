@@ -1,5 +1,6 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import {
+  getSystemPath,
   join,
   normalize,
   Path,
@@ -65,4 +66,16 @@ export function checkUnsupportedConfig(
 export enum RenderTarget {
   client = 'client',
   server = 'server',
+}
+
+export function resolveConfigureWebpack(projectRoot: string) {
+  const configureWebpackPath = join(
+    normalize(projectRoot),
+    'configure-webpack.js'
+  );
+  const host = new virtualFs.SyncDelegateHost(new NodeJsSyncHost());
+
+  return host.exists(configureWebpackPath)
+    ? require(getSystemPath(configureWebpackPath))
+    : undefined;
 }

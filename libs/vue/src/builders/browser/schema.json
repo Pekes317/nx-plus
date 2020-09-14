@@ -108,6 +108,11 @@
       "additionalProperties": true,
       "description": "Configurations related to Vue CLI Plugin such as PWA",
       "type": "object"
+    },
+    "stdin": {
+      "type": "boolean",
+      "description": "Close when stdin ends.",
+      "default": false
     }
   },
   "required": ["dest", "index", "main", "tsConfig"],
