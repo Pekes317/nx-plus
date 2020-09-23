@@ -1,5 +1,7 @@
 import { JsonObject } from '@angular-devkit/core';
 
+import { FileReplacements } from '../../utils';
+
 export interface DevServerBuilderSchema extends JsonObject {
   open: boolean;
   copy: boolean;

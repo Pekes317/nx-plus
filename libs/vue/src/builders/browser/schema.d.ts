@@ -1,5 +1,7 @@
 import { JsonObject } from '@angular-devkit/core';
 
+import { FileReplacements } from '../../utils';
+
 export interface BrowserBuilderSchema extends JsonObject {
   assets?: string[];
   mode: string;
@@ -21,6 +23,7 @@ export interface BrowserBuilderSchema extends JsonObject {
     sourceMap: boolean;
     loaderOptions: object;
   };
+  fileReplacements?: FileReplacements[];
   pluginConfig?: Record<string, unknown>;
   stdin: boolean;
 }

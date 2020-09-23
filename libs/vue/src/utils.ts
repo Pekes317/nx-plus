@@ -12,6 +12,11 @@ import { NodeJsSyncHost } from '@angular-devkit/core/node';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { chalk } = require('@vue/cli-shared-utils');
 
+export interface FileReplacements {
+  replace: string;
+  with: string;
+}
+
 export async function getProjectRoot(context: BuilderContext): Promise<Path> {
   const projectMetadata = await context.getProjectMetadata(
     context.target.project

@@ -1,5 +1,7 @@
 import { JsonObject } from '@angular-devkit/core';
 
+import { FileReplacements } from '../../utils';
+
 export interface LibraryBuilderSchema extends JsonObject {
   dest: string;
   clean: boolean;
@@ -10,6 +12,7 @@ export interface LibraryBuilderSchema extends JsonObject {
   entry: string;
   tsConfig: string;
   inlineVue: boolean;
+  fileReplacements?: FileReplacements[];
   css: {
     requireModuleExtension: boolean;
     extract: boolean | object;

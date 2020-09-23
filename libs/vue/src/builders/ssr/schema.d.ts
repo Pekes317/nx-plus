@@ -1,5 +1,7 @@
 import { JsonObject } from '@angular-devkit/core';
 
+import { FileReplacements } from '../../utils';
+
 interface SSRBundle {
   main: string;
   outFile: string;
@@ -27,6 +29,7 @@ export interface SSRBuilderSchema extends JsonObject {
   publicPath: string;
   filenameHashing: boolean;
   productionSourceMap: boolean;
+  fileReplacements?: FileReplacements[];
   css: {
     requireModuleExtension: boolean;
     extract: boolean | object;

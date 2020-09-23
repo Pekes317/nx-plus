@@ -173,6 +173,17 @@ export function modifyEntryPoint(
   config
     .entry('app')
     .add(getSystemPath(join(normalize(context.workspaceRoot), options.main)));
+
+  if (options.fileReplacements) {
+    const { fileReplacements } = options;
+
+    fileReplacements.forEach((file) => {
+      config.resolve.alias.set(
+        getSystemPath(join(normalize(context.workspaceRoot), file.replace)),
+        getSystemPath(join(normalize(context.workspaceRoot), file.with))
+      );
+    });
+  }
 }
 
 export function modifyTsConfigPaths(
